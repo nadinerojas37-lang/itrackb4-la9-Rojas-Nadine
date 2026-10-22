@@ -1,9 +1,9 @@
- 
- G1 — Column turned into a table
-I turned the `genre` column into its own `genres` table because genre is drawn from a fixed list, the same values repeat across many movies, and it could one day need extra details like a description or category. Fields like `year` or `is_featured` are just raw values and don't need their own table.
+ LA9 — Subjects Database
+ F1 — Nullable Column
+I made `description` nullable. Some subjects are self-explanatory by their code and title alone, so not every record needs extra details. The other fields like code, title, and units are essential for identification — they should never be empty.
 
- G2 — Screenshot 6 query count
-Screenshot 6 showed **7 queries**: 1 to fetch all 6 movies, then 6 separate queries — one for each movie's genre — because of lazy loading (the N+1 problem). After adding `with('genre')`, it dropped to **2** queries total.
+ F2 — First Failed Step
+My first error was `MassAssignmentException` when creating a record in Tinker before adding `$fillable`. Laravel protects against mass assignment by default, so I must explicitly list which columns can be filled.
 
- G3 — Why belongsTo must be singular
-If I named the method `genres()` (plural) instead of `genre()`, Eloquent would look for a foreign key column called `genres_id` instead of `genre_id`. Since that column doesn't exist, every `$movie->genre` call would fail or return null.
+F3 — Pages Work Without Editing Blade
+My views still work because the controller passes variables with the same names and structure as before. The Blade files only display what they receive — they don't care if the data comes from JSON or from the database.
